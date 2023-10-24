@@ -40,11 +40,26 @@ def fetch_files():
             files.append(child.name)
     return files
 
+# compute_marks computes marks of a document (passed as index)
+def compute_marks(documentIndex, similarities, marks):
+    numerator = 0
+    denominator = 0
+    print(similarities)
+    for index in range(len(similarities)):
+        # Skip documents with no marks.
+        if (not marks[index]): continue
+
+        numerator += similarities[index][documentIndex] * marks[index] 
+        denominator += similarities[index][documentIndex]
+    
+    marks = numerator/denominator
+    return marks
+
 text_files = fetch_files()
-marks = [8, 10, 3]
+marks = [8, 10, 3, None]
 
 documents = [open("./input/" + f).read() for f in text_files]
-tfidf = TfidfVectorizer().tfmodel.fit_transform(documents)
+tfidf = TfidfVectorizer().fit_transform(documents)
 countVectors = CountVectorizer().fit_transform(documents).toarray()
 
 pairwise_similarity = tfidf * tfidf.T
@@ -55,8 +70,7 @@ count_similarity = compute_cosine_similarity(countVectors)
 # Combine count vector and tfidf scores.
 similarity = combine_similarities(count_similarity, 0.3, tf_similarity, 0.7)
 
-print(similarity)
-
+print(compute_marks(3, similarity, marks))
 
                                                                                                                                                                                                                  
 
