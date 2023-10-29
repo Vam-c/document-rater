@@ -3,3 +3,62 @@ html {
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
+body {
+    background-color: #EEEEEE;
+}
+
+h1, h5 {
+    margin-bottom: 0.2rem;
+    margin-top: 0.2rem;
+    text-align: center;
+    color: #00ADB5;
+}
+
+h2, h3, h4 {
+    color: #222831;
+}
+
+p {
+    color: #393E46;
+}
+
+/* Mark-entry page styles. */
+.helper-text {
+    display: flex;
+    column-gap: 10px;
+    align-items: center;
+}
+
+.title-container {
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 90px;
+}
+
+.assignment-container {
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    grid-template-columns: 1fr 1fr;
+    row-gap: 20px;
+}
+
+/* results page styles. */
+.result-title-container {
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 90px;
+}
+
+.result-container {
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    grid-template-columns: 1fr 1fr 1fr;
+    row-gap: 20px;
+}

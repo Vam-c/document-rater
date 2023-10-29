@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %} Training - Evaluator {% endblock %}
+{% block body %}
+<h1>Assignment Evaluator</h1>
+<form method="post" action="/assignments/marks">
+<div class="helper-text">
+    <h2>Training Phase: </h2>
+    <p>Add marks obtained to provide training data to the model</p>
+    <button type="submit">Train Model</button>
+</div>
+<div class="title-container">
+    <h3>Assignment</h3>
+    <h3>Marks</h3>
+</div>
+<div class="assignment-container">
+    {% for assignment in assignments %}
+    <span>{{assignment[0]}}</span>
+    <input type="number" placeholder="marks" name="{{assignment[0]}}" default-value="{{assignment[2]}}"/>
+    {% endfor %}
+</div>
+</form>
+{% endblock %}

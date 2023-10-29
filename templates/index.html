@@ -1,21 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> {% block title %}{% endblock %} </title>
-    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
-    <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}Evaluator{% endblock %}
+{% block body %}
     <h1>Assignment Evaluator</h1>
+    <h5>using custom built model</h5>
+    <h2>Upload files</h2>
+    <p>
+        The supervised learning model uses <i>pre-evaluated</i>
+        assignments to learn from and grades the assignments 
+        which are not marked yet.
+    </p>
     <form action="http://localhost:8000/upload" enctype="multipart/form-data" method="post">
         <input type="file" name="files" multiple>
-        <label for="data">Enter marks</label>
-        <input name="data">
-        <input name="data">
-        <input name="data">
         <button type="submit">submit</button>
     </form>
-</body>
-</html>
+{% endblock %}

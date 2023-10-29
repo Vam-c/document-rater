@@ -31,15 +31,25 @@ def home(request: Request):
 def fetch_assignments():
     conn = sqlite3.connect("assignment.db")
     result = conn.cursor().execute("SELECT * FROM assignment;").fetchall()
+    conn.close()
     return result
 
 # Update marks of multiple assignments.
-@app.patch("/assignments/marks")
-def updateMarks(assignments: Annotated[list[dict], Form()]):
-    print(assignments[0].marks)
+@app.post("/assignments/marks")
+async def updateMarks(request: Request):
+    assignments = await request.form()
+    conn = sqlite3.connect("assignment.db")
+    for name, marks in assignments.items():
+        query = "UPDATE assignment SET marks = ? WHERE name = ?;"
+        conn.cursor().execute(query, (marks, name))
+        conn.commit()
+
+    assignments = conn.cursor().execute("SELECT * FROM assignment;").fetchall()
+    conn.close()
+    return templates.TemplateResponse("results.html", {"request": request, "assignments": assignments})
 
 @app.post("/upload")
-async def store_files(files: list[UploadFile]):
+async def store_files(files: list[UploadFile], request: Request):
     # Create input directory if not exists to store files
     storage_dir = Path().cwd() / 'input'
     storage_dir.mkdir(exist_ok=True)
@@ -63,6 +73,9 @@ INSERT INTO assignment(name, path)
 VALUES(?, ?);
 """
         conn.cursor().execute(query, (name, str(path)))
+        assignments = conn.cursor().execute("SELECT * FROM assignment;").fetchall()
+
         conn.commit()
     
     conn.close()
+    return templates.TemplateResponse("marks-entry.html", {"request": request, "assignments": assignments})
