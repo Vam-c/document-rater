@@ -1,15 +1,9 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_extraction.text import CountVectorizer
 
-from utils import fetch_files, combine_similarities, compute_cosine_similarity
+from utils import combine_similarities, compute_cosine_similarity
 
 class AssignmentEvaluator:
-    # data -> data is a list of files along with marks. {file, marks}
-    def __init__(self, data):
-        # files are loaded from /input directory.
-        self.text_files = fetch_files()
-        # data contains marks of each file.
-        self.assignments = data
 
     # compute_marks computes marks of a document (passed as index)
     def compute_marks(self, documentIndex):
@@ -34,9 +28,12 @@ class AssignmentEvaluator:
 
         return similarity_array[doc1_index][doc2_index]
 
-    # fit function creates a similarity matrix between all uploaded assignments.
-    def fit(self):
-        documents = [open("./input/" + f).read() for f in self.text_files]
+    # fit function creates a similarity matrix between files
+    # data -> data is a list of files along with marks. {file, marks}
+    def fit(self, data):
+        # file paths and marks are stored in assignments.
+        self.assignments = data
+        documents = [open(assignment['path']).read() for assignment in self.assignments]
         tfidf = TfidfVectorizer().fit_transform(documents)
         countVectors = CountVectorizer().fit_transform(documents).toarray()
 
@@ -48,7 +45,6 @@ class AssignmentEvaluator:
         # Combine count vector and tfidf scores.
         self.similarities = combine_similarities(count_similarity, 0.3, tf_similarity, 0.7)
 
-        return self.compute_marks(1)
 
 
 

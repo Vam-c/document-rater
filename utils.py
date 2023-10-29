@@ -2,12 +2,14 @@ from pathlib import Path
 from numpy.linalg import norm
 import numpy as np     
 
-def fetch_files():
-    files = []
-    for child in Path('./input').iterdir():
-        if child.is_file():
-            files.append(child.name)
-    return files
+def rows_to_dict(columns, data):
+    result = []
+    for row in data:
+        dictionary = {}
+        for index in range(len(columns)):
+            dictionary[columns[index]] = row[index]
+        result.append(dictionary)
+    return result
 
 # Combines similarity scores from tf-idf and count vectors with assigned weights.
 def combine_similarities(count_similarities, count_weightage, tf_similarities, tf_weightage): 

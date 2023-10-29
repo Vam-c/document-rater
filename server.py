@@ -1,11 +1,11 @@
-from fastapi import FastAPI, UploadFile, Form, Request
-from typing import Annotated
+from fastapi import FastAPI, UploadFile, Form, Request, responses
 from comparator import AssignmentEvaluator
 import sqlite3
 from pathlib import Path
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
+from utils import rows_to_dict
 
 templates = Jinja2Templates(directory="templates")
 app = FastAPI()
@@ -46,7 +46,23 @@ async def updateMarks(request: Request):
 
     assignments = conn.cursor().execute("SELECT * FROM assignment;").fetchall()
     conn.close()
-    return templates.TemplateResponse("results.html", {"request": request, "assignments": assignments})
+    return responses.RedirectResponse('/results')
+
+@app.get("/results")
+async def results(request: Request):
+    # Fetch assignments from db.
+    conn = sqlite3.connect("assignment.db")
+    data = conn.cursor().execute("SELECT path, marks FROM assignment;").fetchall()
+    print(data)
+    # Convert the results into dictionary {path, marks}.
+    assignments = rows_to_dict(("path", "marks"), data)
+
+    # Compute marks using model.
+    model = AssignmentEvaluator();
+    model.fit(assignments)
+    print(model.similarities)
+    # print(model.compute_marks(0))
+    # return templates.TemplateResponse("results.html", {"request": request, "assignments": assignments})
 
 @app.post("/upload")
 async def store_files(files: list[UploadFile], request: Request):
