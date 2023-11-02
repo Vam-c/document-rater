@@ -1,1 +1,0 @@
-An operating system is an interface which connects user and machine
