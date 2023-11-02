@@ -1,6 +1,7 @@
-from pathlib import Path
 from numpy.linalg import norm
 import numpy as np     
+import sqlite3
+from sqlite3 import IntegrityError
 
 def rows_to_dict(columns, data):
     result = []
@@ -33,3 +34,15 @@ def compute_cosine_similarity(vectors):
             similarity[document_2_Index][document_1_Index] = value
 
     return similarity
+
+def create_subject(name):
+    conn = sqlite3.connect("assignment.db")
+
+    try:
+        conn.cursor().execute("INSERT INTO subject(name) VALUES(?)", (name,))
+        conn.commit()
+        conn.close()
+    except IntegrityError:
+        print("Subject Already exists, using the same database...")
+
+    return 

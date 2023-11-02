@@ -2,21 +2,23 @@
 {% block title %} Training - Evaluator {% endblock %}
 {% block body %}
 <h1>Assignment Evaluator</h1>
+<h5>Training Phase</h5>
 <form method="post" action="/assignments/marks">
-<div class="helper-text">
-    <h2>Training Phase: </h2>
-    <p>Add marks obtained to provide training data to the model</p>
-    <button type="submit">Train Model</button>
-</div>
-<div class="title-container">
-    <h3>Assignment</h3>
-    <h3>Marks</h3>
-</div>
-<div class="assignment-container">
-    {% for assignment in assignments %}
-    <span>{{assignment[0]}}</span>
-    <input type="number" placeholder="marks" name="{{assignment[0]}}" default-value="{{assignment[2]}}"/>
-    {% endfor %}
-</div>
+    <div class="helper-text">
+        <h2>{{subject}}</h2>
+    </div>
+    <p>Add obtained marks to provide training data to the model (Psst... You may skip adding marks of un-evaluated assignments)</p>
+    <div class="title-container">
+        <h3>Assignment</h3>
+        <h3>Marks</h3>
+    </div>
+    <div class="assignment-container">
+        {% for assignment in assignments %}
+        <span>{{assignment.name}}</span>
+        <input type="number" placeholder="marks" name="{{assignment.name}}" value="{{assignment.marks}}"/>
+        {% endfor %}
+        <button class="span-2-cols button-49" type="submit">Train Model</button>
+    </div>
+    <input hidden name="subject" value="{{subject}}">
 </form>
 {% endblock %}
