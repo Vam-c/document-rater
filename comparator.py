@@ -4,22 +4,25 @@ from sklearn.feature_extraction.text import CountVectorizer
 from utils import combine_similarities, compute_cosine_similarity
 
 class AssignmentEvaluator:
-
     # compute_marks computes marks of a document (passed as index)
     def compute_marks(self, documentIndex):
         numerator = 0
         denominator = 0
         for index in range(len(self.similarities)):
+            marks = self.assignments[index]["marks"]
             # Skip documents with no marks.
-            if (not self.marks[index]): continue
+            if (not marks): continue
 
-            numerator += self.similarities[index][documentIndex] * self.marks[index] 
+            numerator += self.similarities[index][documentIndex] * float(marks) 
             denominator += self.similarities[index][documentIndex]
-        if denominator:
-            marks = numerator/denominator
+
+        # Check for div by 0.
+        if not denominator:
+            predicted_marks = 0
         else:
-            marks = 0
-        return marks
+            predicted_marks = numerator/denominator
+
+        return predicted_marks
 
     # get_similarity returns the similarity of two documents from similarity matrix.
     def get_similarity(self, doc1, doc2, similarity_array):
