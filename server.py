@@ -81,7 +81,7 @@ async def results(request: Request, subject: str | None = None):
 
     for index in range(len(model.assignments)):
         assignments[index]["predicted_marks"] = round(model.compute_marks(index), 2)
-    print(assignments)
+
     return templates.TemplateResponse("results.html", {"request": request, "assignments": assignments, "subject": subject})
 
 # upload creates a new subject if new_subject is present 
@@ -94,19 +94,17 @@ async def store_files(
 ):
     # we give more priority to new_subject, if it exists.
     # Create an entry for the new_subject and override the subject to new_subject.
-    print(subject)
     if new_subject:
         create_subject(new_subject)
         subject = new_subject
-    print(subject)
 
     # Create input directory if not exists to store files
     storage_dir = Path().cwd() / 'input' / subject
-    storage_dir.mkdir(exist_ok=True)
+    storage_dir.mkdir(exist_ok=True, parents=True)
 
     # Create a db connection.
     conn =  sqlite3.connect("assignment.db")
-    print(len(files))
+
     # Store files on local machine and add file names, paths in db
     for file in files:
         # Strangely, empty files list has length = 1, 

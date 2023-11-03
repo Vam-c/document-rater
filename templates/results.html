@@ -7,7 +7,7 @@
 <div class="upload-more-container">
     <h4>Feel free to add new assignments as of when students turn them in ;)</h4>
 <div>
-    <form action="http://localhost:8000/upload" enctype="multipart/form-data" method="post">
+    <form action="/upload" enctype="multipart/form-data" method="post">
         <input type="file" name="files" multiple>
         <button type="submit">Update files</button>
         <input hidden name="subject" value="{{subject}}">
